@@ -28,6 +28,13 @@ module.exports.getProducts = async (req, res) => {
     //getting only the required fields
     const product = await Product.find({}, { name: 1, _id: 1, quantity: 1 });
 
+    //if there are no products in the inventory
+    if (!product[0]) {
+      return res.status(200).json({
+        message: 'No products found in the inventory!',
+      });
+    }
+
     return res.status(200).json({
       message: 'Products fetched from the database successfully',
       data: {
@@ -43,6 +50,13 @@ module.exports.getProducts = async (req, res) => {
 module.exports.deleteProduct = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(200).json({
+        message: 'Invalid ID!',
+      });
+    }
+
     product.deleteOne();
 
     return res.status(200).json({
@@ -59,6 +73,12 @@ module.exports.deleteProduct = async (req, res) => {
 module.exports.updateQuantity = async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(200).json({
+        message: 'Invalid ID!',
+      });
+    }
+
     product.quantity = req.query.number;
     product.save();
 

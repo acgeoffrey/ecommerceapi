@@ -7,6 +7,7 @@ router.get('/', (req, res) => {
   `);
 });
 
+//router for /products routes
 router.use('/products', require('./products'));
 
 module.exports = router;
